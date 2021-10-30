@@ -23,7 +23,7 @@ async function run() {
     // console.log('database connected succesfully');
     const database = client.db("mdnhs-travel");
     const servicesCollection = database.collection("services");
-    const orderCollection = database.collection("booking");
+    const bookingCollection = database.collection("booking");
 
     // GET API
     app.get("/services", async (req, res) => {
@@ -43,10 +43,19 @@ async function run() {
 
     //   POST API
     app.post("/booking", async (req, res) => {
-      const order = req.body;
-      const result = await orderCollection.insertOne(order);
-      console.log("order", order);
+      const booking = req.body;
+      const result = await bookingCollection.insertOne(booking);
+      console.log("booking", booking);
       res.json(result);
+    });
+
+    // GET single booking
+    app.get("/booking/:key", async (req, res) => {
+      const id = req.params.id;
+      console.log("getting specific service", id);
+      const query = { _id: ObjectId(id) };
+      const booking = await bookingCollection.findOne(query);
+      res.json(booking);
     });
   } finally {
     //  await client.close();
