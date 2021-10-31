@@ -33,7 +33,7 @@ async function run() {
     });
 
     // GET single services
-    app.get("/services/:key", async (req, res) => {
+    app.get("/services/:id", async (req, res) => {
       const id = req.params.id;
       console.log("getting specific service", id);
       const query = { _id: ObjectId(id) };
@@ -63,7 +63,7 @@ async function run() {
     });
 
     // delete event
-    app.delete("/booking/:key", async (req, res) => {
+    app.delete("/booking/:id", async (req, res) => {
       console.log(req.params.id);
       const result = await bookingCollection.deleteOne({
         _id: ObjectId(req.params.id),
@@ -72,7 +72,7 @@ async function run() {
     });
 
     // PUT API
-    app.put("/booking/:key", async (req, res) => {
+    app.put("/booking/:id", async (req, res) => {
       const id = req.params.id;
       const updateDetails = req.body;
       const query = { _id: ObjectId(id) };
@@ -82,7 +82,11 @@ async function run() {
           status: updateDetails.status,
         },
       };
-      const result = await booking.updateOne(query, updateDoc, options);
+      const result = await bookingCollection.updateOne(
+        query,
+        updateDoc,
+        options
+      );
       res.send(result);
     });
   } finally {
