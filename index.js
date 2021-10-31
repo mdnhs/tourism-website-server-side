@@ -63,12 +63,26 @@ async function run() {
     });
 
     // delete event
-
     app.delete("/booking/:key", async (req, res) => {
       console.log(req.params.id);
       const result = await bookingCollection.deleteOne({
         _id: ObjectId(req.params.id),
       });
+      res.send(result);
+    });
+
+    // PUT API
+    app.put("/booking/:key", async (req, res) => {
+      const id = req.params.id;
+      const updateDetails = req.body;
+      const query = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: updateDetails.status,
+        },
+      };
+      const result = await booking.updateOne(query, updateDoc, options);
       res.send(result);
     });
   } finally {
