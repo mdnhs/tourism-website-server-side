@@ -24,6 +24,7 @@ async function run() {
     const database = client.db("mdnhs-travel");
     const servicesCollection = database.collection("services");
     const bookingCollection = database.collection("booking");
+    const updateCollection = database.collection("update");
 
     // GET API
     app.get("/services", async (req, res) => {
@@ -62,6 +63,12 @@ async function run() {
       res.send(result);
     });
 
+    
+    app.get("/update", async (req, res) => {
+      const result = await updateCollection.find({}).toArray();
+      res.send(result);
+    });
+
     // delete event
     app.delete("/booking/:id", async (req, res) => {
       console.log(req.params.id);
@@ -72,7 +79,7 @@ async function run() {
     });
 
     // PUT API
-    app.put("/booking/:id", async (req, res) => {
+    app.put("/update/:id", async (req, res) => {
       const id = req.params.id;
       const updateDetails = req.body;
       const query = { _id: ObjectId(id) };
@@ -82,7 +89,7 @@ async function run() {
           status: updateDetails.status,
         },
       };
-      const result = await bookingCollection.updateOne(
+      const result = await updateCollection.updateOne(
         query,
         updateDoc,
         options
