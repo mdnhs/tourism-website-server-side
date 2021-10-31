@@ -41,6 +41,13 @@ async function run() {
       res.json(service);
     });
 
+    // add service
+    app.post("/services", async (req, res) => {
+      console.log(req.body);
+      const result = await servicesCollection.insertOne(req.body);
+      console.log(result);
+    });
+
     //   POST API
     app.post("/booking", async (req, res) => {
       const booking = req.body;
@@ -52,6 +59,16 @@ async function run() {
     // GET booking
     app.get("/booking", async (req, res) => {
       const result = await bookingCollection.find({}).toArray();
+      res.send(result);
+    });
+
+    // delete event
+
+    app.delete("/booking/:key", async (req, res) => {
+      console.log(req.params.id);
+      const result = await bookingCollection.deleteOne({
+        _id: ObjectId(req.params.id),
+      });
       res.send(result);
     });
   } finally {
