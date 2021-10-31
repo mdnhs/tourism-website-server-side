@@ -34,7 +34,7 @@ async function run() {
     });
 
     // GET single services
-    app.get("/services/:key", async (req, res) => {
+    app.get("/services/:id", async (req, res) => {
       const id = req.params.id;
       console.log("getting specific service", id);
       const query = { _id: ObjectId(id) };
@@ -63,6 +63,13 @@ async function run() {
       res.send(result);
     });
 
+   app.get("/booking/:id", async (req, res) => {
+     const id = req.params.id;
+     console.log("getting specific service", id);
+     const query = { _id: ObjectId(id) };
+     const service = await bookingCollection.findOne(query);
+     res.json(service);
+   });
     
     app.get("/update", async (req, res) => {
       const result = await updateCollection.find({}).toArray();
@@ -70,7 +77,7 @@ async function run() {
     });
 
     // delete event
-    app.delete("/booking/:key", async (req, res) => {
+    app.delete("/booking/:id", async (req, res) => {
       console.log(req.params.id);
       const result = await bookingCollection.deleteOne({
         _id: ObjectId(req.params.id),
@@ -78,8 +85,16 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/update/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("getting specific service", id);
+      const query = { _id: ObjectId(id) };
+      const service = await updateCollection.findOne(query);
+      res.json(service);
+    });
+
     // PUT API
-    app.put("/update/:key", async (req, res) => {
+    app.put("/update/:id", async (req, res) => {
       const id = req.params.id;
       const updateDetails = req.body;
       const query = { _id: ObjectId(id) };
