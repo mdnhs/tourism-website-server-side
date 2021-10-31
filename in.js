@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.wquq5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.wquq5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority;
 console.log(uri);
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -23,7 +23,7 @@ async function run() {
     // console.log('database connected succesfully');
     const database = client.db("mdnhs-travel");
     const servicesCollection = database.collection("services");
-    const bookingCollection = database.collection("booking");
+    const orderCollection = database.collection("booking");
 
     // GET API
     app.get("/services", async (req, res) => {
@@ -43,16 +43,10 @@ async function run() {
 
     //   POST API
     app.post("/booking", async (req, res) => {
-      const booking = req.body;
-      const result = await bookingCollection.insertOne(booking);
-      console.log("booking", booking);
+      const order = req.body;
+      const result = await orderCollection.insertOne(order);
+      console.log("order", order);
       res.json(result);
-    });
-
-    // GET booking
-    app.get("/booking", async (req, res) => {
-      const result = await bookingCollection.find({}).toArray();
-      res.send(result);
     });
   } finally {
     //  await client.close();
