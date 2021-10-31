@@ -93,6 +93,13 @@ async function run() {
       res.json(service);
     });
 
+    app.post("/update/:id", async (req, res) => {
+      const update = req.body;
+      const result = await bookingCollection.insertOne(update);
+      console.log("booking", update);
+      res.json(result);
+    });
+
     // PUT API
     app.put("/update/:id", async (req, res) => {
       const id = req.params.id;
