@@ -57,24 +57,30 @@ async function run() {
       res.json(result);
     });
 
+    app.get("/update", async (req, res) => {
+      const cursor = updateCollection.find({});
+      const update = await cursor.toArray();
+      res.send(update);
+    });
+
+    app.get("/update/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("getting specific service", id);
+      const query = { _id: ObjectId(id) };
+      const update = await updateCollection.findOne(query);
+      res.json(update);
+    });
+
     // GET booking
     app.get("/booking", async (req, res) => {
       const result = await bookingCollection.find({}).toArray();
       res.send(result);
     });
 
-   app.get("/booking/:id", async (req, res) => {
-     const id = req.params.id;
-     console.log("getting specific service", id);
-     const query = { _id: ObjectId(id) };
-     const service = await bookingCollection.findOne(query);
-     res.json(service);
-   });
-    
-    app.get("/update", async (req, res) => {
-      const result = await updateCollection.find({}).toArray();
-      res.send(result);
-    });
+    // app.get("/update", async (req, res) => {
+    //   const result = await updateCollection.find({}).toArray();
+    //   res.send(result);
+    // });
 
     // delete event
     app.delete("/booking/:id", async (req, res) => {
@@ -85,23 +91,8 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/update/:id", async (req, res) => {
-      const id = req.params.id;
-      console.log("getting specific service", id);
-      const query = { _id: ObjectId(id) };
-      const service = await updateCollection.findOne(query);
-      res.json(service);
-    });
-
-    app.post("/update/:id", async (req, res) => {
-      const update = req.body;
-      const result = await bookingCollection.insertOne(update);
-      console.log("booking", update);
-      res.json(result);
-    });
-
     // PUT API
-    app.put("/booking/:id", async (req, res) => {
+    app.put("/update/:id", async (req, res) => {
       const id = req.params.id;
       const updateDetails = req.body;
       const query = { _id: ObjectId(id) };
@@ -111,7 +102,7 @@ async function run() {
           status: updateDetails.status,
         },
       };
-      const result = await bookingCollection.updateOne(
+      const result = await updateCollection.updateOne(
         query,
         updateDoc,
         options
