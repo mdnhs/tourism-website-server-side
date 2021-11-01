@@ -101,7 +101,7 @@ async function run() {
     });
 
     // PUT API
-    app.put("/update/:id", async (req, res) => {
+    app.put("/booking/:id", async (req, res) => {
       const id = req.params.id;
       const updateDetails = req.body;
       const query = { _id: ObjectId(id) };
@@ -111,7 +111,7 @@ async function run() {
           status: updateDetails.status,
         },
       };
-      const result = await updateCollection.updateOne(
+      const result = await bookingCollection.updateOne(
         query,
         updateDoc,
         options
